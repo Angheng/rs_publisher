@@ -1,6 +1,18 @@
 #include "ros/ros.h"
 #include "sensor_msgs/CameraInfo.h"
 
+#include <unistd.h>
+
+	
+std::string
+get_host_name (void)
+{
+     char hostname[1024];
+     gethostname(hostname, 1024);
+     std::string str_host_name(hostname);
+     return str_host_name;
+}
+
 void setCamInfo(sensor_msgs::CameraInfo* tmp)
 {
 	tmp->height = 480;
@@ -21,8 +33,7 @@ int main (int argc, char* argv[])
 	ros::NodeHandle node;
 	ros::Rate rate(10);
 	
-	std::string name;
-	node.getParam("/cam_info_publisher/name", name);
+	std::string name = get_host_name();
 	ROS_WARN("Running %s's Camera info publisher", name.c_str());
 
 	ros::Publisher sender_cam_info = node.advertise<sensor_msgs::CameraInfo> (name+ "/camera_info", 1000);
