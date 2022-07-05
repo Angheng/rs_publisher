@@ -100,7 +100,7 @@ int main (int argc, char* argv[]) try
 
 		sender_image.publish(image_msg);
 		sender_depth_map.publish(depth_msg);
-
+		
 		rate.sleep();
     }
 
