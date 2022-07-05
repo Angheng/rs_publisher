@@ -70,7 +70,7 @@ int main (int argc, char* argv[]) try
 	ros::Rate rate(10);
 	
 	std::string name = get_host_name();
-	ROS_WARN("REALSENSE START. SENSOR NAME : [%s] =============================", name.c_str());
+	ROS_WARN("INITIALIZING REALSENSE. SENSOR NAME : [%s] =============================", name.c_str());
 	rs2::device device = sensor_init();
 
 	image_transport::ImageTransport it(node);
@@ -104,6 +104,9 @@ int main (int argc, char* argv[]) try
 		rate.sleep();
     }
 
+	sender_depth_map.shutdown();
+	sender_image.shutdown();
+
     return EXIT_SUCCESS;
 }
 
@@ -111,7 +114,7 @@ int main (int argc, char* argv[]) try
 catch (const rs2::camera_disconnected_error &e)
 {
 	ROS_ERROR(
-		"CAMERA WAS DISCONNECTED. PLZ CHECK YOUR CAMERA CONNECTION"
+		"CAMERA WAS DISCONNECTED. PLZ CHECK YOUR CAMERA CONNECTION."
 	);
 }
 
