@@ -32,7 +32,7 @@ static rs2::device sensor_init()
 
 void set_msg(sensor_msgs::Image* msg, std::string* name, rs2::frameset* frames, bool is_depth)
 {
-	msg->header.stamp = ros::Time::now();
+	// msg->header.stamp = ros::Time::now();
 	msg->header.frame_id = name->c_str();
 	msg->is_bigendian = false;
 	
@@ -88,11 +88,14 @@ int main (int argc, char* argv[]) try
     while(ros::ok())
     {
 		rs2::frameset frames = p.wait_for_frames();
+		ros::Time time = ros::Time::now();
 		
 		sensor_msgs::Image image_msg;
-		std::thread image_thread = std::thread(set_msg, &image_msg, &frame_id, &frames, false);
-		
 		sensor_msgs::Image depth_msg;
+		image_msg.header.stamp = time;
+		depth_msg.header.stamp = time;
+
+		std::thread image_thread = std::thread(set_msg, &image_msg, &frame_id, &frames, false);
 		std::thread depth_thread = std::thread(set_msg, &depth_msg, &frame_id, &frames, true);
 
 		image_thread.join();
